@@ -5,7 +5,7 @@
 		"jsx": "react",
 		"esModuleInterop": true,
 		"outDir": "dist",
-		"target": "ES2017"
+		"target": "ES2021"
 	},
 	"include": ["source"]
 }

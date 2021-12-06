@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"bin": "dist/cli.js",
 	"engines": {
-		"node": ">=14"
+		"node": ">=16"
 	},
 	"scripts": {
 		"build": "tsc",
@@ -22,8 +22,7 @@
 		"ink-task-list": "^1.1.0",
 		"meow": "^9.0.0",
 		"pkg-install": "^1.0.0",
-		"react": "^17.0.2",
-		"write-pkg": "^4.0.0"
+		"react": "^17.0.2"
 	},
 	"ava": {
 		"typescript": {

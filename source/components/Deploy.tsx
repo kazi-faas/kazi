@@ -25,9 +25,6 @@ const Deploy: FC = () => {
 	useEffect(() => {
 		async function buildSourceCode() {
 			if (tasks.build.state === "loading") {
-				console.info("Building CODE");
-				console.log({ service, tasks });
-
 				try {
 					const result = await build();
 					setService(result);
@@ -50,12 +47,9 @@ const Deploy: FC = () => {
 				tasks.build.state === "success" &&
 				tasks.deploy.state === "loading"
 			) {
-				console.info("DEPLOYING SERVICE");
-				console.log({ service, tasks });
-
 				try {
 					const url = await deploy(service.name, service.image);
-					console.log("here's your URL: ", url);
+					console.info("here's your URL: ", url);
 
 					setTasks((state) => ({
 						...state,
