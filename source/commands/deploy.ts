@@ -40,9 +40,7 @@ const isReady = (k8sObject: KService) =>
 	k8sObject.status.conditions.every((condition) => condition.status === "True");
 
 const hasErrors = (k8sObject: KService) =>
-	k8sObject.status.conditions.every(
-		(condition) => condition.status === "False"
-	);
+	k8sObject.status.conditions.some((condition) => condition.status === "False");
 
 async function checkReadiness(
 	client: k8s.KubernetesObjectApi,
