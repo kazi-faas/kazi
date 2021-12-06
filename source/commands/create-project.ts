@@ -1,6 +1,5 @@
 import degit from "degit";
 import { install as pkgInstall } from "pkg-install";
-import writePackage = require("write-pkg");
 import { join } from "path";
 import { writeFile } from "fs/promises";
 
@@ -26,7 +25,10 @@ async function setProjectName(name: string) {
 		},
 	};
 
-	return writePackage(join(process.cwd(), name, "package.json"), pkg);
+	await writeFile(
+		join(process.cwd(), name, "package.json"),
+		JSON.stringify(pkg, null, 2)
+	);
 }
 
 export const clone = async (name: string) => {
@@ -47,7 +49,7 @@ export const install = async (name: string) => {
 	await setProjectName(name);
 	const dir = join(process.cwd(), name);
 
-	const installDeps = pkgInstall(
+	await pkgInstall(
 		{
 			micro: "^9.3.4",
 		},
@@ -56,7 +58,7 @@ export const install = async (name: string) => {
 			prefer: "npm",
 		}
 	);
-	const installDevDeps = pkgInstall(
+	await pkgInstall(
 		{
 			"micro-dev": "^3.0.0",
 		},
@@ -66,6 +68,4 @@ export const install = async (name: string) => {
 			dev: true,
 		}
 	);
-
-	await Promise.all([installDeps, installDevDeps]);
 };
