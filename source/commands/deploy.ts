@@ -97,7 +97,12 @@ export const deploy = async (name: string, image: string) => {
 	const payload = {
 		apiVersion: "serving.knative.dev/v1",
 		kind: "Service",
-		metadata: { name },
+		metadata: {
+			name,
+			labels: {
+				kazi: "function",
+			},
+		},
 		spec: {
 			template: {
 				spec: { containers: [{ image, ports: [{ containerPort: 3000 }] }] },
