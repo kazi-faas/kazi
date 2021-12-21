@@ -9,14 +9,6 @@ const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
 	input,
 	flags,
 }) => {
-	if (input.length === 0) {
-		return (
-			<Text>
-				⛔️ Invalid command. Use --help to learn about the available commands
-			</Text>
-		);
-	}
-
 	if (input.length === 2 && input[0] === "create") {
 		return <Create input={input} flags={flags} />;
 	}
