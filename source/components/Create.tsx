@@ -28,7 +28,9 @@ const RegistryInput: FC<{
 		} else setValue((prev) => prev + input);
 	});
 
-	return <Text>Enter the registry namespace: {value}</Text>;
+	return (
+		<Text>Enter the registry namespace (e.g docker.io/pmbanugo): {value}</Text>
+	);
 };
 
 const Create: FC<{
