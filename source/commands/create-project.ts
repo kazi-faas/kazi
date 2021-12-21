@@ -14,7 +14,7 @@ export async function createConfigFile(name: string, registry: string) {
 	);
 }
 
-async function setProjectName(name: string) {
+async function createPkgJson(name: string) {
 	const pkg = {
 		name,
 		description: "A function which responds to HTTP requests",
@@ -22,6 +22,7 @@ async function setProjectName(name: string) {
 		scripts: {
 			start: "micro",
 			dev: "micro-dev",
+			deploy: "kazi deploy",
 		},
 	};
 
@@ -46,7 +47,7 @@ export const clone = async (name: string) => {
 };
 
 export const install = async (name: string) => {
-	await setProjectName(name);
+	await createPkgJson(name);
 	const dir = join(process.cwd(), name);
 
 	await pkgInstall(

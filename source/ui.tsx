@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Text } from "ink";
-import CreateFunction from "./components/CreateFunction";
+import Create from "./components/Create";
 import Deploy from "./components/Deploy";
 import List from "./components/List";
 
@@ -17,7 +17,7 @@ const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
 	}
 
 	if (input.length === 2 && input[0] === "create") {
-		return <CreateFunction input={input} flags={flags} />;
+		return <Create input={input} flags={flags} />;
 	}
 	if (input[0] === "function" && input[1] === "list") {
 		return <List />;

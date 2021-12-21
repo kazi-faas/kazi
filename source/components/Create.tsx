@@ -1,46 +1,59 @@
 import React, { FC, useEffect, useState } from "react";
 import { TaskList, Task } from "ink-task-list";
+import { useInput, Text } from "ink";
 import { clone, install, createConfigFile } from "../commands/create-project";
 
 type State = "pending" | "loading" | "success" | "warning" | "error";
 type List = Record<"install" | "create", { label: string; state: State }>;
 
-const CreateFunction: FC<{
+const RegistryInput: FC<{
+	onSubmit: (value: string) => void;
+}> = ({ onSubmit }) => {
+	const [value, setValue] = useState("");
+
+	useInput((input, key) => {
+		if (
+			key.upArrow ||
+			key.downArrow ||
+			key.leftArrow || // this disables cursor change with left arrow
+			key.rightArrow || // this disables cursor change with right arrow
+			key.tab ||
+			(key.shift && key.tab)
+		) {
+			return;
+		} else if (key.backspace || key.delete) {
+			setValue((prev) => prev.slice(0, -1));
+		} else if (key.return) {
+			onSubmit(value);
+		} else setValue((prev) => prev + input);
+	});
+
+	return <Text>Enter the registry namespace: {value}</Text>;
+};
+
+const Create: FC<{
 	input: string[];
-	flags?: Record<string, any>;
+	flags?: Record<string, unknown>;
 }> = ({ input, flags }) => {
 	const [tasks, setTasks] = useState<List>({
 		create: { label: "Create the project", state: "loading" },
 		install: { label: "Install project's dependencies", state: "pending" },
 	});
+	const [registry, setRegistry] = useState(flags?.["registry"] as string);
 
 	const name = input[1];
 
 	useEffect(() => {
 		async function createProject() {
-			if (name && tasks.create.state === "loading") {
+			if (name && registry && tasks.create.state === "loading") {
 				await clone(name);
-				if (flags) {
-					await createConfigFile(name, String(flags["registry"]));
-				}
-				// TODO: if no flags, ask user for required flags. This will perhaps require restructuring this component
+				await createConfigFile(name, registry);
 
 				setTasks((state) => ({
 					create: { ...state.create, state: "success" },
 					install: { ...state.install, state: "loading" },
 				}));
-			}
-		}
-		createProject();
-	});
 
-	useEffect(() => {
-		async function installDependencies() {
-			if (
-				name &&
-				tasks.create.state === "success" &&
-				tasks.install.state === "loading"
-			) {
 				await install(name);
 				setTasks((state) => ({
 					...state,
@@ -48,8 +61,13 @@ const CreateFunction: FC<{
 				}));
 			}
 		}
-		installDependencies();
-	});
+
+		createProject();
+	}, [registry]);
+
+	if (registry === undefined || registry === "") {
+		return <RegistryInput onSubmit={setRegistry} />;
+	}
 
 	return (
 		<TaskList>
@@ -60,5 +78,5 @@ const CreateFunction: FC<{
 	);
 };
 
-module.exports = CreateFunction;
-export default CreateFunction;
+module.exports = Create;
+export default Create;

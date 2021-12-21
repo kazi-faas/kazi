@@ -29,6 +29,7 @@ export const list = async () => {
 		};
 		await kc.applyToRequest(opts);
 
+		// TODO: add filter to return services with "kazi=function" specific label
 		const response: ServiceResponse = await got(opts.url, {
 			headers: opts.headers,
 			https: {
