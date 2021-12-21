@@ -21,7 +21,15 @@ const List: FC = () => {
 		getFunctions();
 	}, [text]);
 
-	return data ? <Table data={data} /> : <Text>{text}</Text>;
+	return data ? (
+		data.length > 0 ? (
+			<Table data={data} />
+		) : (
+			<Text>You haven't deployed any function.</Text>
+		)
+	) : (
+		<Text>{text}</Text>
+	);
 };
 
 module.exports = List;

@@ -12,7 +12,7 @@ const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
 	if (input.length === 2 && input[0] === "create") {
 		return <Create input={input} flags={flags} />;
 	}
-	if (input[0] === "function" && input[1] === "list") {
+	if (input.length === 1 && input[0] === "list") {
 		return <List />;
 	}
 
