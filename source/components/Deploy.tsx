@@ -18,7 +18,7 @@ const Deploy: FC = () => {
 	>();
 	const [error, setError] = useState<string | undefined>();
 	const [tasks, setTasks] = useState<List>({
-		build: { label: "Build source code", state: "loading" },
+		build: { label: "Build and publish image", state: "loading" },
 		deploy: { label: "Deploy function", state: "pending" },
 	});
 
