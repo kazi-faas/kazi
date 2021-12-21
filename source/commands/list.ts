@@ -25,11 +25,10 @@ export const list = async () => {
 	if (server) {
 		const NAMESPACE = "default";
 		const opts: any = {
-			url: `${server}/apis/serving.knative.dev/v1/namespaces/${NAMESPACE}/services`,
+			url: `${server}/apis/serving.knative.dev/v1/namespaces/${NAMESPACE}/services?labelSelector=kazi=function`,
 		};
 		await kc.applyToRequest(opts);
 
-		// TODO: add filter to return services with "kazi=function" specific label
 		const response: ServiceResponse = await got(opts.url, {
 			headers: opts.headers,
 			https: {
