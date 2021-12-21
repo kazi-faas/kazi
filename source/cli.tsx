@@ -8,7 +8,7 @@ import { helpText } from "./meow-util";
 
 const cli = meow(helpText, {
 	flags: {
-		name: {
+		registry: {
 			type: "string",
 		},
 	},
