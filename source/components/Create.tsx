@@ -35,13 +35,13 @@ const RegistryInput: FC<{
 
 const Create: FC<{
 	input: string[];
-	flags?: Record<string, unknown>;
-}> = ({ input, flags }) => {
+	registryFlag?: string;
+}> = ({ input, registryFlag }) => {
 	const [tasks, setTasks] = useState<List>({
 		create: { label: "Create the project", state: "loading" },
 		install: { label: "Install project's dependencies", state: "pending" },
 	});
-	const [registry, setRegistry] = useState(flags?.["registry"] as string);
+	const [registry, setRegistry] = useState(registryFlag);
 
 	const name = input[1];
 

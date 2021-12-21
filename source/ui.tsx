@@ -4,13 +4,18 @@ import Create from "./components/Create";
 import Deploy from "./components/Deploy";
 import List from "./components/List";
 import { helpText } from "./meow-util";
+import { TypedFlags } from "meow";
 
-const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
-	input,
-	flags,
-}) => {
+const App: FC<{
+	input: string[];
+	flags?: TypedFlags<{
+		registry: {
+			type: "string";
+		};
+	}>;
+}> = ({ input, flags }) => {
 	if (input.length === 2 && input[0] === "create") {
-		return <Create input={input} flags={flags} />;
+		return <Create input={input} registryFlag={flags?.registry} />;
 	}
 	if (input.length === 1 && input[0] === "list") {
 		return <List />;
