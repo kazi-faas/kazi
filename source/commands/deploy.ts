@@ -42,7 +42,7 @@ const isReady = (k8sObject: KService) =>
 const hasErrors = (k8sObject: KService) =>
 	k8sObject.status.conditions.some((condition) => condition.status === "False");
 
-async function checkReadiness(
+async function getReadiness(
 	client: k8s.KubernetesObjectApi,
 	payload: KServicePayload
 ) {
@@ -114,7 +114,6 @@ export const deploy = async (name: string, image: string) => {
 	kc.loadFromDefault();
 	const client = k8s.KubernetesObjectApi.makeApiClient(kc);
 
-	//TODO: Refactor later?
 	try {
 		// try to get the resource, if it does not exist an error will be thrown and we will end up in the catch
 		// block.
@@ -130,10 +129,9 @@ export const deploy = async (name: string, image: string) => {
 
 		await client.replace(updatePayload);
 
-		return checkReadiness(client, payload);
+		return getReadiness(client, payload);
 	} catch (e) {
 		await client.create(payload);
-
-		return checkReadiness(client, payload);
+		return getReadiness(client, payload);
 	}
 };

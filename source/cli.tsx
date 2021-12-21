@@ -4,26 +4,14 @@ import React from "react";
 import { render } from "ink";
 import meow from "meow";
 import App from "./ui";
+import { helpText } from "./meow-util";
 
-const cli = meow(
-	`
-	Usage
-	  $ kazi
-
-	Options
-		--name  Your name
-
-	Examples
-	  $ kazi --name=Jane
-	  Hello, Jane
-`,
-	{
-		flags: {
-			name: {
-				type: "string",
-			},
+const cli = meow(helpText, {
+	flags: {
+		name: {
+			type: "string",
 		},
-	}
-);
+	},
+});
 
 render(<App input={cli.input} flags={cli.flags} />);

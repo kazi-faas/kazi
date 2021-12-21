@@ -3,6 +3,7 @@ import { Text } from "ink";
 import Create from "./components/Create";
 import Deploy from "./components/Deploy";
 import List from "./components/List";
+import { helpText } from "./meow-util";
 
 const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
 	input,
@@ -27,11 +28,7 @@ const App: FC<{ input: string[]; flags?: Record<string, unknown> }> = ({
 		return <Deploy />;
 	}
 
-	return (
-		<Text>
-			Hello, <Text color="green">{"World!"}</Text>
-		</Text>
-	);
+	return <Text>{helpText}</Text>;
 };
 
 module.exports = App;
