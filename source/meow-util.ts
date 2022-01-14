@@ -8,8 +8,9 @@ Usage
   $ kazi create <Function_Name>
 
 Options
-  --registry  Your registry namespace
+  --registry (-r),  Your registry namespace
+	--use-yarn, Use Yarn to install dependencies
 
 Examples
-  $ kazi create hello --name=docker.io/pmbanugo
+  $ kazi create hello --registry=docker.io/pmbanugo
 `;

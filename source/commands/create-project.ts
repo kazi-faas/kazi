@@ -46,7 +46,9 @@ export const clone = async (name: string) => {
 	await emitter.clone(`./${name}`);
 };
 
-export const install = async (name: string) => {
+export const install = async (name: string, useYarn: boolean = false) => {
+	const pkgManager = useYarn ? "yarn" : "npm";
+
 	await createPkgJson(name);
 	const dir = join(process.cwd(), name);
 
@@ -56,7 +58,7 @@ export const install = async (name: string) => {
 		},
 		{
 			cwd: dir,
-			prefer: "npm",
+			prefer: pkgManager,
 		}
 	);
 	await pkgInstall(
@@ -65,7 +67,7 @@ export const install = async (name: string) => {
 		},
 		{
 			cwd: dir,
-			prefer: "npm",
+			prefer: pkgManager,
 			dev: true,
 		}
 	);

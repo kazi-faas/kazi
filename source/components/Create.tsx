@@ -36,7 +36,8 @@ const RegistryInput: FC<{
 const Create: FC<{
 	input: string[];
 	registryFlag?: string;
-}> = ({ input, registryFlag }) => {
+	useYarn?: boolean;
+}> = ({ input, registryFlag, useYarn }) => {
 	const [tasks, setTasks] = useState<List>({
 		create: { label: "Create the project", state: "loading" },
 		install: { label: "Install project's dependencies", state: "pending" },
@@ -56,7 +57,7 @@ const Create: FC<{
 					install: { ...state.install, state: "loading" },
 				}));
 
-				await install(name);
+				await install(name, useYarn);
 				setTasks((state) => ({
 					...state,
 					install: { ...state.install, state: "success" },

@@ -11,11 +11,23 @@ const App: FC<{
 	flags?: TypedFlags<{
 		registry: {
 			type: "string";
+			alias: "r";
+			isRequired: true;
+		};
+		useYarn: {
+			type: "boolean";
+			default: false;
 		};
 	}>;
 }> = ({ input, flags }) => {
 	if (input.length === 2 && input[0] === "create") {
-		return <Create input={input} registryFlag={flags?.registry} />;
+		return (
+			<Create
+				input={input}
+				registryFlag={flags?.registry}
+				useYarn={flags?.useYarn}
+			/>
+		);
 	}
 	if (input.length === 1 && input[0] === "list") {
 		return <List />;
