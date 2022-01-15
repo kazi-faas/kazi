@@ -4,6 +4,16 @@ Serverless functions allow developers to quickly implement and deploy functional
 
 > Knative provides reduced operational overhead, auto-scaling, automatic domain and TLS provisioning. Add functions to it, you get the features of serverless functions that has become popular and loved among developers.
 
+## Features
+
+- **Standard:** The function runtime is just HTTP. It runs anywhere Node.js is supported!
+- **Lightweight:** The function has just one dependency, which weighs less than 1MB.
+- **Simple:** Designed for single purpose functions.
+- **Easy:** Super easy deployment and containerization. Local development experience is the same as any Node.js application development.
+  - For local development, environment variables are automatically read from a `.env` file.
+  - For Kubernetes deployment, environment variables from `.env` is saved in a ConfigMap and used at runtime.
+  - JSON parsing is opt-in.
+
 ## Install
 
 ```bash
