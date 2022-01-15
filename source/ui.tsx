@@ -12,11 +12,9 @@ const App: FC<{
 		registry: {
 			type: "string";
 			alias: "r";
-			isRequired: true;
 		};
 		useYarn: {
 			type: "boolean";
-			default: false;
 		};
 	}>;
 }> = ({ input, flags }) => {

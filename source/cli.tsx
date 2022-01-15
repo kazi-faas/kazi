@@ -10,6 +10,11 @@ const cli = meow(helpText, {
 	flags: {
 		registry: {
 			type: "string",
+			alias: "r",
+		},
+		useYarn: {
+			type: "boolean",
+			default: false,
 		},
 	},
 });
