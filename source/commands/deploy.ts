@@ -1,7 +1,7 @@
 import * as k8s from "@kubernetes/client-node";
 import util from "util";
 import { exec } from "child_process";
-import { readFile } from "fs/promises";
+import { readFile, access } from "fs/promises";
 
 type KService = k8s.KubernetesObject & {
 	status: {
@@ -69,12 +69,137 @@ async function getReadiness(
 			}
 		}, 2000);
 	});
+	const url = await promise;
 
-	return promise;
+	return String(url);
 }
 
 async function getConfig() {
 	return readFile("./config.json", "utf8").then((config) => JSON.parse(config));
+}
+
+async function hasEnv() {
+	try {
+		await access("./.env");
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+async function getEnv() {
+	const env = await readFile("./.env", "utf8");
+	return env.split("\n").reduce((prev: { [key: string]: string }, current) => {
+		if (current.length > 2 && current.includes("=")) {
+			const [key, value] = current.split("="); //TODO: values with = will break this logic. Fix this later
+			if (key !== undefined && value !== undefined) {
+				prev[key] = value;
+			}
+		}
+
+		return prev;
+	}, {});
+}
+
+async function createConfigMap(
+	name: string,
+	env: { [key: string]: string },
+	k8sClient: k8s.KubernetesObjectApi
+) {
+	const configMapName = `ksvc-${name}`;
+	const configMap = {
+		kind: "ConfigMap",
+		apiVersion: "v1",
+		metadata: {
+			name: configMapName,
+			labels: {
+				kazi: "function",
+			},
+		},
+		data: env,
+	};
+
+	try {
+		// try to get the resource, if it does not exist an error will be thrown and we will end up in the catch
+		// block.
+		const { body } = await k8sClient.read(configMap);
+		const updatedConfigMap = {
+			...body,
+			data: env,
+		};
+
+		await k8sClient.replace(updatedConfigMap);
+	} catch (e) {
+		await k8sClient.create(configMap);
+	}
+	return configMapName;
+}
+
+async function createService(
+	{
+		name,
+		image,
+		configMapName,
+	}: {
+		name: string;
+		image: string;
+		configMapName?: string;
+	},
+	k8sClient: k8s.KubernetesObjectApi
+) {
+	const useConfigMap = configMapName !== undefined;
+	const functionContainer = {
+		image,
+		envFrom: useConfigMap
+			? [
+					{
+						configMapRef: {
+							name: configMapName,
+						},
+					},
+			  ]
+			: undefined,
+		ports: [{ containerPort: 3000 }],
+	};
+
+	const payload = {
+		apiVersion: "serving.knative.dev/v1",
+		kind: "Service",
+		metadata: {
+			name,
+			labels: {
+				kazi: "function",
+			},
+		},
+		spec: {
+			template: {
+				spec: {
+					containers: [functionContainer],
+				},
+			},
+		},
+	};
+
+	try {
+		// try to get the resource, if it does not exist an error will be thrown and we will end up in the catch
+		// block.
+		const { body } = await k8sClient.read(payload);
+		const updatePayload = {
+			...body,
+			spec: {
+				template: {
+					spec: { containers: [{ image, ports: [{ containerPort: 3000 }] }] },
+				},
+			},
+		};
+
+		await k8sClient.replace(updatePayload);
+
+		return getReadiness(k8sClient, payload);
+	} catch (e) {
+		await k8sClient.create(payload);
+		return getReadiness(k8sClient, payload);
+	}
 }
 
 export const build = async () => {
@@ -94,44 +219,18 @@ export const build = async () => {
 };
 
 export const deploy = async (name: string, image: string) => {
-	const payload = {
-		apiVersion: "serving.knative.dev/v1",
-		kind: "Service",
-		metadata: {
-			name,
-			labels: {
-				kazi: "function",
-			},
-		},
-		spec: {
-			template: {
-				spec: { containers: [{ image, ports: [{ containerPort: 3000 }] }] },
-			},
-		},
-	};
-
 	const kc = new k8s.KubeConfig();
 	kc.loadFromDefault();
 	const client = k8s.KubernetesObjectApi.makeApiClient(kc);
 
-	try {
-		// try to get the resource, if it does not exist an error will be thrown and we will end up in the catch
-		// block.
-		const { body } = await client.read(payload);
-		const updatePayload = {
-			...body,
-			spec: {
-				template: {
-					spec: { containers: [{ image, ports: [{ containerPort: 3000 }] }] },
-				},
-			},
-		};
+	const shouldCreateConfigMap = await hasEnv();
+	let configMapName: string | undefined;
 
-		await client.replace(updatePayload);
-
-		return getReadiness(client, payload);
-	} catch (e) {
-		await client.create(payload);
-		return getReadiness(client, payload);
+	if (shouldCreateConfigMap) {
+		const env = await getEnv();
+		configMapName = await createConfigMap(name, env, client);
 	}
+
+	const serviceData = { name, image, configMapName };
+	return createService(serviceData, client);
 };
