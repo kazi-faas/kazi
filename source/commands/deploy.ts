@@ -207,8 +207,10 @@ export const build = async () => {
 	const image = registry + "/" + name;
 
 	const execAsync = util.promisify(exec);
+	// Enable Heap Memory Optimization for Node.js using BP_NODE_OPTIMIZE_MEMORY env variable.
+	// See https://paketo.io/docs/howto/nodejs/#enable-heap-memory-optimization for more info
 	const { stdout, stderr } = await execAsync(
-		`pack build ${image} --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base --quiet --publish`
+		`pack build ${image} --buildpack gcr.io/paketo-buildpacks/nodejs --builder paketobuildpacks/builder:base --env BP_NODE_OPTIMIZE_MEMORY=true --quiet --publish`
 	);
 
 	if (stderr) {
