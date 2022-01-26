@@ -1,8 +1,10 @@
 {
-	"name": "kazi",
+	"name": "@kazi-faas/cli",
 	"version": "0.0.0-development",
 	"license": "MIT",
-	"bin": "dist/cli.js",
+	"bin": {
+		"kazi": "dist/cli.js"
+	},
 	"engines": {
 		"node": ">=16"
 	},
