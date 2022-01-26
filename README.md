@@ -45,3 +45,7 @@ Options
 Examples
   $ kazi create hello --registry=docker.io/pmbanugo
 ```
+
+## Contributing
+
+This repo is still a work in progress, so contributiong rules might change. But you're free to send PR, see [RELEASE doc](/RELEASE.md) for release information and [CONTRIBUTING](#) for contributiong guideline.
