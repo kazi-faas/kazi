@@ -14,7 +14,7 @@
 		"start": "npm run build && dist/cli.js",
 		"pretest": "npm run build",
 		"test": "xo && ava",
-		"semantic-release": "semantic-release"
+		"semantic-release": "npm run build && semantic-release"
 	},
 	"files": [
 		"dist/cli.js"
