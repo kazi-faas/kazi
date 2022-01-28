@@ -91,9 +91,9 @@ async function getEnv() {
 	const env = await readFile("./.env", "utf8");
 	return env.split("\n").reduce((prev: { [key: string]: string }, current) => {
 		if (current.length > 2 && current.includes("=")) {
-			const [key, value] = current.split("="); //TODO: values with = will break this logic. Fix this later
+			const [key, ...value] = current.split("=");
 			if (key !== undefined && value !== undefined) {
-				prev[key] = value;
+				prev[key] = value.join("=");
 			}
 		}
 

@@ -75,5 +75,8 @@
 			},
 			"next"
 		]
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }
