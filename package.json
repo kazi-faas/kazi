@@ -82,7 +82,7 @@
 				"@semantic-release/npm",
 				{
 					"assets": [
-						"dist/**"
+						"dist"
 					]
 				}
 			],
@@ -90,7 +90,7 @@
 				"@semantic-release/github",
 				{
 					"assets": [
-						"dist/**"
+						"dist"
 					]
 				}
 			]
