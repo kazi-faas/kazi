@@ -17,7 +17,7 @@
 		"semantic-release": "npm run build && semantic-release"
 	},
 	"files": [
-		"dist/cli.js"
+		"dist"
 	],
 	"dependencies": {
 		"@kubernetes/client-node": "^0.16.1",
@@ -74,26 +74,6 @@
 				"prerelease": true
 			},
 			"next"
-		],
-		"plugins": [
-			"@semantic-release/commit-analyzer",
-			"@semantic-release/release-notes-generator",
-			[
-				"@semantic-release/npm",
-				{
-					"assets": [
-						"dist"
-					]
-				}
-			],
-			[
-				"@semantic-release/github",
-				{
-					"assets": [
-						"dist"
-					]
-				}
-			]
 		]
 	},
 	"publishConfig": {
