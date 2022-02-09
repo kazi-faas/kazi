@@ -17,7 +17,7 @@ Serverless functions allow developers to quickly implement and deploy functional
 ## Install
 
 ```bash
-$ npm install -g kazi
+npm i -g @kazi-faas/cli
 ```
 
 ## Pre-requisite
@@ -26,6 +26,10 @@ $ npm install -g kazi
 2. pack CLI
 3. Node 16.3.x (some commands may not run smoothly in versions below 16)
 
+## Getting Started
+
+> TODO: A short guide that shows the concept so users can get started on the topic in under 10 minutes.
+
 ## CLI
 
 ```
@@ -33,14 +37,15 @@ Commands
   $ kazi create: Scaffold a new project
   $ kazi list: List the functions deployed using kazi
   $ kazi deploy: Deploy a function (only works if you're inside the function's directory)
-	$ kazi --help: Show help text
+  $ kazi --help: Show help text
 
 Usage
   $ kazi create <Function_Name>
 
 Options
   --registry (-r),  Your registry namespace
-	--use-yarn, Use Yarn to install dependencies
+	--use-yarn, Use Yarn to install dependencies (default: false)
+	--workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
 
 Examples
   $ kazi create hello --registry=docker.io/pmbanugo

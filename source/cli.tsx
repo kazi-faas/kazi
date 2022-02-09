@@ -16,6 +16,10 @@ const cli = meow(helpText, {
 			type: "boolean",
 			default: false,
 		},
+		workspaceInstall: {
+			type: "boolean",
+			default: false,
+		},
 	},
 });
 

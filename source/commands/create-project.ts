@@ -1,11 +1,16 @@
 import degit from "degit";
-import { install as pkgInstall } from "pkg-install";
+import { projectInstall } from "pkg-install";
 import { join } from "path";
 import { writeFile } from "fs/promises";
 
+function stripPath(name: string) {
+	//removes directory name if it's included.
+	return name.split("/").pop();
+}
+
 export async function createConfigFile(name: string, registry: string) {
 	const config = {
-		name,
+		name: stripPath(name),
 		registry,
 	};
 	await writeFile(
@@ -14,15 +19,21 @@ export async function createConfigFile(name: string, registry: string) {
 	);
 }
 
-async function createPkgJson(name: string) {
+export async function createPkgJson(name: string) {
 	const pkg = {
-		name,
+		name: stripPath(name),
 		description: "A function which responds to HTTP requests",
 		main: "index.js",
 		scripts: {
 			start: "micro",
 			dev: "micro-dev",
 			deploy: "kazi deploy",
+		},
+		dependencies: {
+			micro: "^9.3.4",
+		},
+		devDependencies: {
+			"micro-dev": "^3.0.0",
 		},
 	};
 
@@ -46,29 +57,16 @@ export const clone = async (name: string) => {
 	await emitter.clone(`./${name}`);
 };
 
-export const install = async (name: string, useYarn: boolean = false) => {
+export const install = async (
+	name: string,
+	useYarn: boolean,
+	workspaceInstall: boolean
+) => {
 	const pkgManager = useYarn ? "yarn" : "npm";
-
-	await createPkgJson(name);
 	const dir = join(process.cwd(), name);
 
-	await pkgInstall(
-		{
-			micro: "^9.3.4",
-		},
-		{
-			cwd: dir,
-			prefer: pkgManager,
-		}
-	);
-	await pkgInstall(
-		{
-			"micro-dev": "^3.0.0",
-		},
-		{
-			cwd: dir,
-			prefer: pkgManager,
-			dev: true,
-		}
-	);
+	await projectInstall({
+		cwd: workspaceInstall ? undefined : dir,
+		prefer: pkgManager,
+	});
 };

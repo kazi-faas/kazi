@@ -16,6 +16,9 @@ const App: FC<{
 		useYarn: {
 			type: "boolean";
 		};
+		workspaceInstall: {
+			type: "boolean";
+		};
 	}>;
 }> = ({ input, flags }) => {
 	if (input.length === 2 && input[0] === "create") {
@@ -24,6 +27,7 @@ const App: FC<{
 				input={input}
 				registryFlag={flags?.registry}
 				useYarn={flags?.useYarn}
+				workspaceInstall={flags?.workspaceInstall}
 			/>
 		);
 	}
