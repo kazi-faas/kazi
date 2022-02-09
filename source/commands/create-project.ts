@@ -3,9 +3,14 @@ import { install as pkgInstall } from "pkg-install";
 import { join } from "path";
 import { writeFile } from "fs/promises";
 
+function stripPath(name: string) {
+	//removes directory name if it's included.
+	return name.split("/").pop();
+}
+
 export async function createConfigFile(name: string, registry: string) {
 	const config = {
-		name,
+		name: stripPath(name),
 		registry,
 	};
 	await writeFile(
@@ -14,9 +19,9 @@ export async function createConfigFile(name: string, registry: string) {
 	);
 }
 
-async function createPkgJson(name: string) {
+export async function createPkgJson(name: string) {
 	const pkg = {
-		name,
+		name: stripPath(name),
 		description: "A function which responds to HTTP requests",
 		main: "index.js",
 		scripts: {
@@ -48,8 +53,6 @@ export const clone = async (name: string) => {
 
 export const install = async (name: string, useYarn: boolean = false) => {
 	const pkgManager = useYarn ? "yarn" : "npm";
-
-	await createPkgJson(name);
 	const dir = join(process.cwd(), name);
 
 	await pkgInstall(

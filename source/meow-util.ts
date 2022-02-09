@@ -10,7 +10,8 @@ Usage
 
 Options
   --registry (-r),  Your registry namespace
-	--use-yarn, Use Yarn to install dependencies
+	--use-yarn, Use Yarn to install dependencies (default: false)
+	--skip-install, Skip installing the dependencies (default: false)
 
 Examples
   $ kazi create hello --registry=docker.io/pmbanugo

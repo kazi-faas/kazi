@@ -1,7 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import { TaskList, Task } from "ink-task-list";
 import { useInput, Text } from "ink";
-import { clone, install, createConfigFile } from "../commands/create-project";
+import {
+	clone,
+	install,
+	createConfigFile,
+	createPkgJson,
+} from "../commands/create-project";
 
 type State = "pending" | "loading" | "success" | "warning" | "error";
 type List = Record<"install" | "create", { label: string; state: State }>;
@@ -37,7 +42,8 @@ const Create: FC<{
 	input: string[];
 	registryFlag?: string;
 	useYarn?: boolean;
-}> = ({ input, registryFlag, useYarn }) => {
+	skipInstall?: boolean;
+}> = ({ input, registryFlag, useYarn, skipInstall }) => {
 	const [tasks, setTasks] = useState<List>({
 		create: { label: "Create the project", state: "loading" },
 		install: { label: "Install project's dependencies", state: "pending" },
@@ -51,17 +57,28 @@ const Create: FC<{
 			if (name && registry && tasks.create.state === "loading") {
 				await clone(name);
 				await createConfigFile(name, registry);
+				await createPkgJson(name);
 
 				setTasks((state) => ({
 					create: { ...state.create, state: "success" },
 					install: { ...state.install, state: "loading" },
 				}));
 
-				await install(name, useYarn);
-				setTasks((state) => ({
-					...state,
-					install: { ...state.install, state: "success" },
-				}));
+				if (skipInstall) {
+					setTasks((state) => ({
+						...state,
+						install: {
+							label: "Install project's dependencies [SKIPPED]",
+							state: "pending",
+						},
+					}));
+				} else {
+					await install(name, useYarn);
+					setTasks((state) => ({
+						...state,
+						install: { ...state.install, state: "success" },
+					}));
+				}
 			}
 		}
 
