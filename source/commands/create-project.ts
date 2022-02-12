@@ -1,5 +1,5 @@
 import degit from "degit";
-import { install as pkgInstall } from "pkg-install";
+import { projectInstall } from "pkg-install";
 import { join } from "path";
 import { writeFile } from "fs/promises";
 
@@ -29,6 +29,12 @@ export async function createPkgJson(name: string) {
 			dev: "micro-dev",
 			deploy: "kazi deploy",
 		},
+		dependencies: {
+			micro: "^9.3.4",
+		},
+		devDependencies: {
+			"micro-dev": "^3.0.0",
+		},
 	};
 
 	await writeFile(
@@ -55,23 +61,8 @@ export const install = async (name: string, useYarn: boolean = false) => {
 	const pkgManager = useYarn ? "yarn" : "npm";
 	const dir = join(process.cwd(), name);
 
-	await pkgInstall(
-		{
-			micro: "^9.3.4",
-		},
-		{
-			cwd: dir,
-			prefer: pkgManager,
-		}
-	);
-	await pkgInstall(
-		{
-			"micro-dev": "^3.0.0",
-		},
-		{
-			cwd: dir,
-			prefer: pkgManager,
-			dev: true,
-		}
-	);
+	await projectInstall({
+		cwd: dir,
+		prefer: pkgManager,
+	});
 };
