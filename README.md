@@ -17,7 +17,7 @@ Serverless functions allow developers to quickly implement and deploy functional
 ## Install
 
 ```bash
-$ npm install -g kazi
+npm i -g @kazi-faas/cli
 ```
 
 ## Pre-requisite
@@ -25,6 +25,10 @@ $ npm install -g kazi
 1. Docker
 2. pack CLI
 3. Node 16.3.x (some commands may not run smoothly in versions below 16)
+
+## Getting Started
+
+> TODO: A short guide that shows the concept so users can get started on the topic in under 10 minutes.
 
 ## CLI
 
