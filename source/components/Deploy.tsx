@@ -56,7 +56,6 @@ const Deploy: FC = () => {
 						deploy: { ...state.deploy, state: "success" },
 					}));
 				} catch (error) {
-					console.log({ error });
 					setTasks((state) => ({
 						...state,
 						deploy: { ...state.deploy, state: "error" },
