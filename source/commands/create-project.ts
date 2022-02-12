@@ -57,12 +57,16 @@ export const clone = async (name: string) => {
 	await emitter.clone(`./${name}`);
 };
 
-export const install = async (name: string, useYarn: boolean = false) => {
+export const install = async (
+	name: string,
+	useYarn: boolean,
+	workspaceInstall: boolean
+) => {
 	const pkgManager = useYarn ? "yarn" : "npm";
 	const dir = join(process.cwd(), name);
 
 	await projectInstall({
-		cwd: dir,
+		cwd: workspaceInstall ? undefined : dir,
 		prefer: pkgManager,
 	});
 };

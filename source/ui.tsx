@@ -16,7 +16,7 @@ const App: FC<{
 		useYarn: {
 			type: "boolean";
 		};
-		skipInstall: {
+		workspaceInstall: {
 			type: "boolean";
 		};
 	}>;
@@ -27,7 +27,7 @@ const App: FC<{
 				input={input}
 				registryFlag={flags?.registry}
 				useYarn={flags?.useYarn}
-				skipInstall={flags?.skipInstall}
+				workspaceInstall={flags?.workspaceInstall}
 			/>
 		);
 	}

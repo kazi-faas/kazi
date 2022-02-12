@@ -45,7 +45,7 @@ Usage
 Options
   --registry (-r),  Your registry namespace
 	--use-yarn, Use Yarn to install dependencies (default: false)
-	--skip-install, Skip installing the dependencies (default: false)
+	--workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
 
 Examples
   $ kazi create hello --registry=docker.io/pmbanugo

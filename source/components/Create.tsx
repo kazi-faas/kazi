@@ -42,8 +42,8 @@ const Create: FC<{
 	input: string[];
 	registryFlag?: string;
 	useYarn?: boolean;
-	skipInstall?: boolean;
-}> = ({ input, registryFlag, useYarn, skipInstall }) => {
+	workspaceInstall?: boolean;
+}> = ({ input, registryFlag, useYarn, workspaceInstall }) => {
 	const [tasks, setTasks] = useState<List>({
 		create: { label: "Create the project", state: "loading" },
 		install: { label: "Install project's dependencies", state: "pending" },
@@ -64,21 +64,11 @@ const Create: FC<{
 					install: { ...state.install, state: "loading" },
 				}));
 
-				if (skipInstall) {
-					setTasks((state) => ({
-						...state,
-						install: {
-							label: "Install project's dependencies [SKIPPED]",
-							state: "pending",
-						},
-					}));
-				} else {
-					await install(name, useYarn);
-					setTasks((state) => ({
-						...state,
-						install: { ...state.install, state: "success" },
-					}));
-				}
+				await install(name, Boolean(useYarn), Boolean(workspaceInstall));
+				setTasks((state) => ({
+					...state,
+					install: { ...state.install, state: "success" },
+				}));
 			}
 		}
 

@@ -16,7 +16,7 @@ const cli = meow(helpText, {
 			type: "boolean",
 			default: false,
 		},
-		skipInstall: {
+		workspaceInstall: {
 			type: "boolean",
 			default: false,
 		},
