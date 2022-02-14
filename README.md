@@ -51,6 +51,10 @@ Examples
   $ kazi create hello --registry=docker.io/pmbanugo
 ```
 
+## Tutorials
+
+- [From AWS Lambda & API Gateway To Knative & Kong API Gateway](https://www.pmbanugo.me/blog/2022-02-13-from-aws-lambda-api-gateway-to-knative-kong-api-gateway/)
+
 ## Contributing
 
 This repo is still a work in progress, so contributiong rules might change. But you're free to send PR, see [RELEASE doc](/RELEASE.md) for release information and [CONTRIBUTING](#) for contributiong guideline.
