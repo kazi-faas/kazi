@@ -8,10 +8,10 @@ Commands
 Usage
   $ kazi create <Function_Name>
 
-Options
+Options: kazi create
   --registry (-r),  Your registry namespace
-	--use-yarn, Use Yarn to install dependencies (default: false)
-	--workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
+  --use-yarn, Use Yarn to install dependencies (default: false)
+  --workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
 
 Examples
   $ kazi create hello --registry=docker.io/pmbanugo
