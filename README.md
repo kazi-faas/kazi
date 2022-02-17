@@ -67,6 +67,10 @@ There's not so much you can customise for the project at the moment. The _config
 
 The function API is based on [micro](https://github.com/vercel/micro). You can check the documentation for how to [read the request body](https://github.com/vercel/micro#body-parsing), or the available [APIs](https://github.com/vercel/micro#api). There will be more extensions custom to kazi in the future, so keep an eye for that 😉.
 
+## Environment Variables
+
+The function can read environment variables from a **.env**. The values are automatically loaded when running locally (using `npm run dev`), and are automatically uploaded to your Kubernetes cluster as a ConfigMap object, which is then loaded when the container starts. Therefore, you need not do any magic to get environment variable working locally or in the cluster.
+
 ## CLI
 
 ```
