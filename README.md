@@ -71,6 +71,10 @@ The function API is based on [micro](https://github.com/vercel/micro). You can c
 
 The function can read environment variables from a **.env**. The values are automatically loaded when running locally (using `npm run dev`), and are automatically uploaded to your Kubernetes cluster as a ConfigMap object, which is then loaded when the container starts. Therefore, you need not do any magic to get environment variable working locally or in the cluster.
 
+## Tutorials
+
+- [From AWS Lambda & API Gateway To Knative & Kong API Gateway](https://www.pmbanugo.me/blog/2022-02-13-from-aws-lambda-api-gateway-to-knative-kong-api-gateway/)
+
 ## CLI
 
 ```
@@ -78,23 +82,28 @@ Commands
   $ kazi create: Scaffold a new project
   $ kazi list: List the functions deployed using kazi
   $ kazi deploy: Deploy a function (only works if you're inside the function's directory)
-  $ kazi --help: Show help text
+	$ kazi --help: Show help text
 
 Usage
-  $ kazi create <Function_Name>
+  Command: kazi create <Function_Name>
 
-Options: kazi create
-  --registry (-r),  Your registry namespace
-  --use-yarn, Use Yarn to install dependencies (default: false)
-  --workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
+	Options: kazi create
+		--registry (-r),  Your registry namespace (REQUIRED)
+    --use-yarn, Use Yarn to install dependencies (default: false)
+    --workspace-install, Used to install the dependencies in a workspace i.e using the workspace's node_modules(default: false).
 
-Examples
-  $ kazi create hello --registry=docker.io/pmbanugo
+	Examples
+		$ kazi create hello --registry=docker.io/pmbanugo
+
+  Command: kazi deploy
+
+	Options: kazi deploy
+		--context (-c), specify the context to use for the deployment (OPTIONAL)
+
+	Examples
+		$ kazi deploy
+		$ kazi deploy -c docker-desktop
 ```
-
-## Tutorials
-
-- [From AWS Lambda & API Gateway To Knative & Kong API Gateway](https://www.pmbanugo.me/blog/2022-02-13-from-aws-lambda-api-gateway-to-knative-kong-api-gateway/)
 
 ## Contributing
 
