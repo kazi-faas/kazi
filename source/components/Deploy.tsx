@@ -12,7 +12,7 @@ const Error: FC<{ error: string }> = ({ error }) => (
 	</Box>
 );
 
-const Deploy: FC = () => {
+const Deploy: FC<{ context?: string }> = ({ context }) => {
 	const [service, setService] = useState<
 		{ name: string; image: string } | undefined
 	>();
@@ -48,7 +48,7 @@ const Deploy: FC = () => {
 				tasks.deploy.state === "loading"
 			) {
 				try {
-					const url = await deploy(service.name, service.image);
+					const url = await deploy(service.name, service.image, context);
 					console.info("here's your URL: ", url);
 
 					setTasks((state) => ({

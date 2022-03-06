@@ -220,9 +220,10 @@ export const build = async () => {
 	return { name, image: stdout.replace("\n", "") };
 };
 
-export const deploy = async (name: string, image: string) => {
+export const deploy = async (name: string, image: string, context?: string) => {
 	const kc = new k8s.KubeConfig();
 	kc.loadFromDefault();
+	context && kc.setCurrentContext(context);
 	const client = k8s.KubernetesObjectApi.makeApiClient(kc);
 
 	const shouldCreateConfigMap = await hasEnv();

@@ -20,6 +20,10 @@ const cli = meow(helpText, {
 			type: "boolean",
 			default: false,
 		},
+		context: {
+			type: "string",
+			alias: "c",
+		},
 	},
 });
 
