@@ -19,6 +19,10 @@ const App: FC<{
 		workspaceInstall: {
 			type: "boolean";
 		};
+		context: {
+			type: "string";
+			alias: "c";
+		};
 	}>;
 }> = ({ input, flags }) => {
 	if (input.length === 2 && input[0] === "create") {
@@ -36,7 +40,7 @@ const App: FC<{
 	}
 
 	if (input.length === 1 && input[0] === "deploy") {
-		return <Deploy />;
+		return <Deploy context={flags?.context} />;
 	}
 
 	return <Text>{helpText}</Text>;
