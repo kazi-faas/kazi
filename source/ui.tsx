@@ -23,6 +23,10 @@ const App: FC<{
 			type: "string";
 			alias: "c";
 		};
+		namespace: {
+			type: "string";
+			alias: "n";
+		};
 	}>;
 }> = ({ input, flags }) => {
 	if (input.length === 2 && input[0] === "create") {
@@ -40,7 +44,7 @@ const App: FC<{
 	}
 
 	if (input.length === 1 && input[0] === "deploy") {
-		return <Deploy context={flags?.context} />;
+		return <Deploy context={flags?.context} namespace={flags?.namespace} />;
 	}
 
 	return <Text>{helpText}</Text>;

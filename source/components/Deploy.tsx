@@ -12,7 +12,10 @@ const Error: FC<{ error: string }> = ({ error }) => (
 	</Box>
 );
 
-const Deploy: FC<{ context?: string }> = ({ context }) => {
+const Deploy: FC<{ context?: string; namespace?: string }> = ({
+	context,
+	namespace = "default",
+}) => {
 	const [service, setService] = useState<
 		{ name: string; image: string } | undefined
 	>();
@@ -49,8 +52,12 @@ const Deploy: FC<{ context?: string }> = ({ context }) => {
 				tasks.deploy.state === "loading"
 			) {
 				try {
-					const url = await deploy(service.name, service.image, context);
-					console.info("here's your URL: ", url);
+					const url = await deploy({
+						name: service.name,
+						image: service.image,
+						context,
+						namespace,
+					});
 
 					setUrl(url);
 					setTasks((state) => ({

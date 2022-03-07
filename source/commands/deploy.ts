@@ -139,10 +139,12 @@ async function createService(
 	{
 		name,
 		image,
+		namespace,
 		configMapName,
 	}: {
 		name: string;
 		image: string;
+		namespace: string;
 		configMapName?: string;
 	},
 	k8sClient: k8s.KubernetesObjectApi
@@ -167,6 +169,7 @@ async function createService(
 		kind: "Service",
 		metadata: {
 			name,
+			namespace,
 			labels: {
 				kazi: "function",
 			},
@@ -220,7 +223,17 @@ export const build = async () => {
 	return { name, image: stdout.replace("\n", "") };
 };
 
-export const deploy = async (name: string, image: string, context?: string) => {
+export const deploy = async ({
+	name,
+	image,
+	namespace,
+	context,
+}: {
+	name: string;
+	image: string;
+	context?: string;
+	namespace: string;
+}) => {
 	const kc = new k8s.KubeConfig();
 	kc.loadFromDefault();
 	context && kc.setCurrentContext(context);
@@ -234,6 +247,6 @@ export const deploy = async (name: string, image: string, context?: string) => {
 		configMapName = await createConfigMap(name, env, client);
 	}
 
-	const serviceData = { name, image, configMapName };
+	const serviceData = { name, image, configMapName, namespace };
 	return createService(serviceData, client);
 };

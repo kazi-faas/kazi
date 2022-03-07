@@ -24,6 +24,11 @@ const cli = meow(helpText, {
 			type: "string",
 			alias: "c",
 		},
+		namespace: {
+			type: "string",
+			alias: "n",
+			default: "default",
+		},
 	},
 });
 

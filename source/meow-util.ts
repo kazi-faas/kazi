@@ -20,8 +20,10 @@ Usage
 
 	Options: kazi deploy
 		--context (-c), specify the context to use for the deployment (OPTIONAL)
+    --namespace (-n), specify the namespace to deploy into (OPTIONAL)
 
 	Examples
 		$ kazi deploy
 		$ kazi deploy -c docker-desktop
+		$ kazi deploy -c docker-desktop -n default
 `;
