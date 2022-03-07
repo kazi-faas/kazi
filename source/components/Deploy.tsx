@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { TaskList, Task } from "ink-task-list";
-import { Box, Text } from "ink";
+import { Box, Text, Newline } from "ink";
 import { build, deploy } from "../commands/deploy";
 
 type State = "pending" | "loading" | "success" | "warning" | "error";
@@ -17,6 +17,7 @@ const Deploy: FC<{ context?: string }> = ({ context }) => {
 		{ name: string; image: string } | undefined
 	>();
 	const [error, setError] = useState<string | undefined>();
+	const [url, setUrl] = useState<string | undefined>();
 	const [tasks, setTasks] = useState<List>({
 		build: { label: "Build and publish image", state: "loading" },
 		deploy: { label: "Deploy function", state: "pending" },
@@ -51,6 +52,7 @@ const Deploy: FC<{ context?: string }> = ({ context }) => {
 					const url = await deploy(service.name, service.image, context);
 					console.info("here's your URL: ", url);
 
+					setUrl(url);
 					setTasks((state) => ({
 						...state,
 						deploy: { ...state.deploy, state: "success" },
@@ -70,11 +72,20 @@ const Deploy: FC<{ context?: string }> = ({ context }) => {
 	return error ? (
 		<Error error={error} />
 	) : (
-		<TaskList>
-			{Object.entries(tasks).map(([key, { label, state }]) => (
-				<Task key={key} label={label} state={state} />
-			))}
-		</TaskList>
+		<>
+			<TaskList>
+				{Object.entries(tasks).map(([key, { label, state }]) => (
+					<Task key={key} label={label} state={state} />
+				))}
+			</TaskList>
+			{url && (
+				<Text>
+					<Newline />
+					<Text>Service {service?.name} deployed at: </Text>
+					<Text color={"blue"}>{url}</Text>
+				</Text>
+			)}
+		</>
 	);
 };
 
