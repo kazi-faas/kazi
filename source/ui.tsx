@@ -1,34 +1,12 @@
-import React, { FC } from "react";
+import React from "react";
 import { Text } from "ink";
 import Create from "./components/Create";
 import Deploy from "./components/Deploy";
 import List from "./components/List";
 import { helpText } from "./meow-util";
-import { TypedFlags } from "meow";
+import { AppProps } from "./components/prop-types";
 
-const App: FC<{
-	input: string[];
-	flags?: TypedFlags<{
-		registry: {
-			type: "string";
-			alias: "r";
-		};
-		useYarn: {
-			type: "boolean";
-		};
-		workspaceInstall: {
-			type: "boolean";
-		};
-		context: {
-			type: "string";
-			alias: "c";
-		};
-		namespace: {
-			type: "string";
-			alias: "n";
-		};
-	}>;
-}> = ({ input, flags }) => {
+const App = ({ input, flags }: AppProps) => {
 	if (input.length === 2 && input[0] === "create") {
 		return (
 			<Create
@@ -40,11 +18,33 @@ const App: FC<{
 		);
 	}
 	if (input.length === 1 && input[0] === "list") {
-		return <List />;
+		return (
+			<List
+				credential={{
+					context: flags?.context,
+					kubeconfig: flags?.kubeconfig,
+					server: flags?.server,
+					skipTLSVerify: flags?.skipTlsVerify,
+					token: flags?.token,
+				}}
+				namespace={flags?.namespace}
+			/>
+		);
 	}
 
 	if (input.length === 1 && input[0] === "deploy") {
-		return <Deploy context={flags?.context} namespace={flags?.namespace} />;
+		return (
+			<Deploy
+				credential={{
+					context: flags?.context,
+					kubeconfig: flags?.kubeconfig,
+					server: flags?.server,
+					skipTLSVerify: flags?.skipTlsVerify,
+					token: flags?.token,
+				}}
+				namespace={flags?.namespace}
+			/>
+		);
 	}
 
 	return <Text>{helpText}</Text>;

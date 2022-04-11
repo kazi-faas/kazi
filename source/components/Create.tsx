@@ -7,9 +7,12 @@ import {
 	createConfigFile,
 	createPkgJson,
 } from "../commands/create-project";
+import { LoadingState } from "./prop-types";
 
-type State = "pending" | "loading" | "success" | "warning" | "error";
-type List = Record<"install" | "create", { label: string; state: State }>;
+type List = Record<
+	"install" | "create",
+	{ label: string; state: LoadingState }
+>;
 
 const RegistryInput: FC<{
 	onSubmit: (value: string) => void;

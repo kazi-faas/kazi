@@ -1,9 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "ink";
 import Table from "ink-table";
 import { list } from "../commands/list";
+import { CredentialWithNamespace } from "./prop-types";
 
-const List: FC = () => {
+const List = ({
+	credential,
+	namespace = "default",
+}: CredentialWithNamespace) => {
 	const loadingText = "😵‍💫 Loading....";
 	const [text, setText] = useState(loadingText);
 	const [data, setData] = useState<{ name: string; url: string }[]>();
@@ -12,7 +16,15 @@ const List: FC = () => {
 		async function getFunctions() {
 			if (text === loadingText) {
 				try {
-					setData(await list());
+					setData(
+						await list({
+							credential: {
+								...credential,
+								skipTLSVerify: credential.skipTLSVerify ?? false,
+							},
+							namespace,
+						})
+					);
 				} catch (error) {
 					setText(`⛔️ ${(error as Error)?.message}`);
 				}
