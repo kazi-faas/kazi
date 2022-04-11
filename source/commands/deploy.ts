@@ -2,8 +2,9 @@ import * as k8s from "@kubernetes/client-node";
 import util from "util";
 import { exec } from "child_process";
 import { readFile, access } from "fs/promises";
+import { createClient, ClusterCredentialWithNamespace } from "../k8s-client";
 
-type KService = k8s.KubernetesObject & {
+interface KService extends k8s.KubernetesObject {
 	status: {
 		url?: string;
 		conditions: Array<{
@@ -14,7 +15,7 @@ type KService = k8s.KubernetesObject & {
 			lastTransitionTime?: string;
 		}>;
 	};
-};
+}
 
 interface KServicePayload {
 	apiVersion: string;
@@ -34,6 +35,11 @@ interface KServicePayload {
 			};
 		};
 	};
+}
+
+interface DeployOptions extends ClusterCredentialWithNamespace {
+	name: string;
+	image: string;
 }
 
 const isReady = (k8sObject: KService) =>
@@ -227,17 +233,9 @@ export const deploy = async ({
 	name,
 	image,
 	namespace,
-	context,
-}: {
-	name: string;
-	image: string;
-	context?: string;
-	namespace: string;
-}) => {
-	const kc = new k8s.KubeConfig();
-	kc.loadFromDefault();
-	context && kc.setCurrentContext(context);
-	const client = k8s.KubernetesObjectApi.makeApiClient(kc);
+	credential,
+}: DeployOptions) => {
+	const client = createClient(credential);
 
 	const shouldCreateConfigMap = await hasEnv();
 	let configMapName: string | undefined;

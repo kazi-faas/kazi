@@ -29,6 +29,19 @@ const cli = meow(helpText, {
 			alias: "n",
 			default: "default",
 		},
+		server: {
+			type: "string",
+		},
+		token: {
+			type: "string",
+		},
+		kubeconfig: {
+			type: "string",
+		},
+		skipTlsVerify: {
+			type: "boolean",
+			default: false,
+		},
 	},
 });
 

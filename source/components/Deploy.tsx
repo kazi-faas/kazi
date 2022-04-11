@@ -1,21 +1,21 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TaskList, Task } from "ink-task-list";
 import { Box, Text, Newline } from "ink";
 import { build, deploy } from "../commands/deploy";
+import { CredentialWithNamespace, LoadingState } from "./prop-types";
 
-type State = "pending" | "loading" | "success" | "warning" | "error";
-type List = Record<"build" | "deploy", { label: string; state: State }>;
+type List = Record<"build" | "deploy", { label: string; state: LoadingState }>;
 
-const Error: FC<{ error: string }> = ({ error }) => (
+const Error = ({ error }: { error: string }) => (
 	<Box>
 		<Text color="redBright">{error}</Text>
 	</Box>
 );
 
-const Deploy: FC<{ context?: string; namespace?: string }> = ({
-	context,
+const Deploy = ({
+	credential,
 	namespace = "default",
-}) => {
+}: CredentialWithNamespace) => {
 	const [service, setService] = useState<
 		{ name: string; image: string } | undefined
 	>();
@@ -55,7 +55,10 @@ const Deploy: FC<{ context?: string; namespace?: string }> = ({
 					const url = await deploy({
 						name: service.name,
 						image: service.image,
-						context,
+						credential: {
+							...credential,
+							skipTLSVerify: credential.skipTLSVerify ?? false,
+						},
 						namespace,
 					});
 

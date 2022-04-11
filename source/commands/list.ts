@@ -1,7 +1,10 @@
-import * as k8s from "@kubernetes/client-node";
 import got from "got";
+import {
+	getAuthorizedRequestOptions,
+	ClusterCredentialWithNamespace,
+} from "../k8s-client";
 
-type ServiceResponse = {
+interface ServiceResponse {
 	items: [
 		{
 			metadata: {
@@ -15,38 +18,29 @@ type ServiceResponse = {
 			};
 		}
 	];
-};
+}
 
-export const list = async () => {
-	const kc = new k8s.KubeConfig();
-	kc.loadFromDefault();
-	const server = kc.getCurrentCluster()?.server;
+export const list = async (
+	credentialWithNamespace: ClusterCredentialWithNamespace
+) => {
+	const opts = await getAuthorizedRequestOptions(credentialWithNamespace);
 
-	if (server) {
-		const NAMESPACE = "default";
-		const opts: any = {
-			url: `${server}/apis/serving.knative.dev/v1/namespaces/${NAMESPACE}/services?labelSelector=kazi=function`,
-		};
-		await kc.applyToRequest(opts);
+	const response: ServiceResponse = await got(opts.url as string, {
+		headers: opts.headers,
+		https: {
+			certificate: opts.cert,
+			certificateAuthority: opts.ca,
+			key: opts.key,
+			rejectUnauthorized: false,
+		},
+	}).json();
 
-		const response: ServiceResponse = await got(opts.url, {
-			headers: opts.headers,
-			https: {
-				certificate: opts.cert,
-				certificateAuthority: opts.ca,
-				key: opts.key,
-				rejectUnauthorized: false,
-			},
-		}).json();
+	const result = response.items
+		.filter((x) => x.metadata.labels?.["kazi"] === "function")
+		.map((x) => ({
+			name: x.metadata.name,
+			url: x?.status?.url,
+		}));
 
-		const result = response.items
-			.filter((x) => x.metadata.labels?.["kazi"] === "function")
-			.map((x) => ({
-				name: x.metadata.name,
-				url: x?.status?.url,
-			}));
-
-		return result;
-	} else
-		throw new Error("Couldn't load the Kubernetes server value from config");
+	return result;
 };
