@@ -57,6 +57,7 @@ export async function getAuthorizedRequestOptions({
 }: ClusterCredentialWithNamespace): Promise<OptionsWithUrl> {
 	const kc = initialiseKubeConfig(credential);
 	const baseUrl = credential.server ?? kc.getCurrentCluster()?.server;
+
 	if (!baseUrl)
 		throw new Error("Couldn't load the Kubernetes server value from config");
 
