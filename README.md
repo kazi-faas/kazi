@@ -1,6 +1,6 @@
 # kazi - your serverless function tool for Knative
 
-Serverless functions allow developers to quickly implement and deploy functionality that can be invoked via HTTP requests. This CLI enables easy development and deployment of serverless JS functions to Knative. Currently supports deploying only Node.js functions, but hopefully include a Deno runtime in the near future (perhaps you can sponsor this feature. Check out the [sponsors pages](#)
+Serverless functions allow developers to quickly implement and deploy functionality that can be invoked via HTTP requests. This CLI enables easy development and deployment of serverless JS functions to Knative. Currently supports deploying only Node.js functions, but hopefully include a Deno runtime in the near future (perhaps you can sponsor this feature. Check out the [sponsors pages](https://github.com/sponsors/pmbanugo)
 
 > Knative provides reduced operational overhead, auto-scaling, automatic domain and TLS provisioning. Add functions to it, you get the features of serverless functions that has become popular and loved among developers.
 
